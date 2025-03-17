@@ -117,21 +117,28 @@ export const Pitcher = styled.div<{ isPitching: boolean }>`
 
 // Batter animation
 const swingAnimation = keyframes`
-  0% { transform: rotate(0); }
-  30% { transform: rotate(-90deg); }
-  100% { transform: rotate(90deg); }
+  0% { 
+    transform: translateX(-50%) rotate(0);
+  }
+  30% { 
+    transform: translateX(-50%) rotate(-90deg);
+  }
+  100% { 
+    transform: translateX(-50%) rotate(90deg);
+  }
 `;
 
 export const Batter = styled.div<{ isSwinging: boolean }>`
   position: absolute;
   bottom: 15%;
-  left: calc(50% + 50px); /* Position batter to the right of home plate */
+  left: calc(50% + 60px); /* Position batter slightly further from plate */
   transform: translateX(-50%);
   width: 40px;
   height: 70px;
   background-color: #FF6347;
   border-radius: 50% 50% 10px 10px;
   z-index: 5;
+  transform-origin: center bottom;
   
   ${props => props.isSwinging && css`
     animation: ${swingAnimation} 0.3s ease-in-out;
@@ -155,13 +162,13 @@ export const Batter = styled.div<{ isSwinging: boolean }>`
   &:after {
     content: '';
     position: absolute;
-    top: 10px;
-    right: -55px;
-    width: 80px; /* Longer bat */
-    height: 12px;
+    top: 15px;
+    left: -40px; /* Position bat to extend across plate */
+    width: 90px; /* Longer bat */
+    height: 8px;
     background-color: #8B4513;
-    border-radius: 5px;
-    transform-origin: left center;
+    border-radius: 4px;
+    transform-origin: right center;
     transform: rotate(-20deg);
     z-index: 4;
   }
