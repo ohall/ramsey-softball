@@ -112,38 +112,43 @@ export const Batter = styled.div<{ isSwinging: boolean }>`
   bottom: 20%;
   left: 50%;
   transform: translateX(-50%);
-  width: 30px;
-  height: 60px;
+  width: 40px;
+  height: 70px;
   background-color: #FF6347;
   border-radius: 50% 50% 10px 10px;
+  z-index: 5;
   
   ${props => props.isSwinging && css`
     animation: ${swingAnimation} 0.3s ease-in-out;
   `}
   
+  /* Head */
   &:before {
     content: '';
     position: absolute;
-    top: -15px;
+    top: -20px;
     left: 50%;
     transform: translateX(-50%);
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
     background-color: #FFA07A;
     border-radius: 50%;
+    z-index: 6;
   }
   
+  /* Bat */
   &:after {
     content: '';
     position: absolute;
     top: 10px;
-    right: -40px;
-    width: 50px;
-    height: 10px;
+    right: -55px;
+    width: 70px;
+    height: 12px;
     background-color: #8B4513;
     border-radius: 5px;
     transform-origin: left center;
     transform: rotate(-20deg);
+    z-index: 4;
   }
 `;
 
@@ -189,29 +194,40 @@ export const ControlsContainer = styled.div`
   color: white;
 `;
 
-export const Button = styled.button`
-  padding: 12px 20px;
-  background-color: #E74C3C;
+export const Button = styled.button<{ highlight?: boolean }>`
+  padding: 16px 24px;
+  background-color: ${props => props.highlight ? '#2ECC71' : '#E74C3C'};
   color: white;
   border: none;
   border-radius: 25px;
-  font-size: 16px;
+  font-size: 20px;
   font-weight: bold;
   text-transform: uppercase;
-  margin: 8px 0;
   cursor: pointer;
-  box-shadow: 0 4px 0 #C0392B;
+  box-shadow: 0 6px 0 ${props => props.highlight ? '#27AE60' : '#C0392B'};
   transition: all 0.1s;
+  width: 80%;
+  max-width: 300px;
+  margin: 16px auto;
+  letter-spacing: 1px;
+  animation: ${props => props.highlight ? 'pulse 1.5s infinite' : 'none'};
+  
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
   
   &:active {
     transform: translateY(4px);
-    box-shadow: 0 0 0 #C0392B;
+    box-shadow: 0 2px 0 ${props => props.highlight ? '#27AE60' : '#C0392B'};
   }
   
   &:disabled {
     background-color: #95A5A6;
     box-shadow: 0 4px 0 #7F8C8D;
     cursor: not-allowed;
+    animation: none;
   }
 `;
 
@@ -263,10 +279,25 @@ export const HomePlate = styled.div`
   bottom: 15%;
   left: 50%;
   transform: translateX(-50%);
-  width: 25px;
-  height: 25px;
+  width: 40px;
+  height: 40px;
   background-color: white;
   clip-path: polygon(0% 30%, 30% 0%, 70% 0%, 100% 30%, 50% 100%);
+  border: 2px solid #333;
+  z-index: 3;
+  
+  &:after {
+    content: '';
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: rgba(139, 69, 19, 0.3); /* Dirt circle around home plate */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+  }
 `;
 
 // Result Message
@@ -358,4 +389,29 @@ export const GameTitle = styled.h1`
   margin: 0;
   font-size: 1.5rem;
   border-bottom: 2px solid #BDC3C7;
+`;
+
+export const DebugMessage = styled.div`
+  position: absolute;
+  bottom: 35%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  z-index: 1000;
+  text-align: center;
+  pointer-events: none;
+  max-width: 80%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  animation: fadeInOut 3s infinite;
+  
+  @keyframes fadeInOut {
+    0% { opacity: 0.7; }
+    50% { opacity: 1; }
+    100% { opacity: 0.7; }
+  }
 `;

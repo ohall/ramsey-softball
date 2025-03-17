@@ -22,7 +22,8 @@ import {
   OverlayContent,
   OverlayTitle,
   OverlayText,
-  GameTitle
+  GameTitle,
+  DebugMessage
 } from './StyledComponents';
 
 const Game: React.FC = () => {
@@ -30,8 +31,8 @@ const Game: React.FC = () => {
   const gameFieldRef = useRef<HTMLDivElement>(null);
   const ballRef = useRef<HTMLDivElement>(null);
   
-  // State
-  const [gameState, setGameState] = useState<GameState>(GameState.WAITING);
+  // State - Start in BATTING state for immediate interaction
+  const [gameState, setGameState] = useState<GameState>(GameState.BATTING);
   const [stats, setStats] = useState<GameStats>({
     score: 0,
     strikes: 0,
@@ -42,7 +43,7 @@ const Game: React.FC = () => {
   });
   const [isPitching, setIsPitching] = useState(false);
   const [isSwinging, setIsSwinging] = useState(false);
-  const [ballVisible, setBallVisible] = useState(false);
+  const [ballVisible, setBallVisible] = useState(true);
   const [currentPitch, setCurrentPitch] = useState<PitchSettings | null>(null);
   const [resultMessage, setResultMessage] = useState<{ text: string, type: 'success' | 'error' | 'neutral' } | null>(null);
   const [showOverlay, setShowOverlay] = useState(false);
@@ -50,7 +51,7 @@ const Game: React.FC = () => {
   
   // Ball position animation
   const ballStartPosition = { x: window.innerWidth / 2, y: window.innerHeight * 0.25 };
-  const ballEndPosition = { x: window.innerWidth / 2, y: window.innerHeight * 0.8 };
+  const ballEndPosition = { x: window.innerWidth / 2, y: window.innerHeight * 0.7 };
   const ballPositionRef = useRef<Position>(ballStartPosition);
   const pitchTimingRef = useRef<number>(0);
   
@@ -63,7 +64,8 @@ const Game: React.FC = () => {
   // Initialize a new at-bat
   const startNewAtBat = useCallback(() => {
     setGameState(GameState.WAITING);
-    setBallVisible(false);
+    // Keep ball visible for debugging
+    setBallVisible(true);
     setResultMessage(null);
   }, []);
   
@@ -295,6 +297,18 @@ const Game: React.FC = () => {
     setGameState(GameState.BETWEEN_PLAYS);
   }, [gameState, handlePitchResult, playSound]);
   
+  // Debug function to help test the game
+  const handleDebugClick = useCallback((e: React.MouseEvent) => {
+    // Click to toggle between swinging and pitching
+    if (gameState === GameState.BATTING) {
+      handleSwing();
+    } else if (gameState === GameState.WAITING) {
+      handlePitch();
+    } else if (gameState === GameState.BETWEEN_PLAYS) {
+      startNewAtBat();
+    }
+  }, [gameState, handleSwing, handlePitch, startNewAtBat]);
+
   // Touch/swipe events
   const swipeEvents = {
     onSwipeStart: () => {},
@@ -305,10 +319,13 @@ const Game: React.FC = () => {
       }
     },
     onTap: () => {
+      // Use the same debug handling for taps
       if (gameState === GameState.WAITING) {
         handlePitch();
       } else if (gameState === GameState.BATTING) {
         handleSwing();
+      } else if (gameState === GameState.BETWEEN_PLAYS) {
+        startNewAtBat();
       }
     }
   };
@@ -317,7 +334,7 @@ const Game: React.FC = () => {
   
   return (
     <GameContainer>
-      <GameTitle>Ramsey Softball at Finch Park</GameTitle>
+      <GameTitle>Ramsey Softball at Finch Park (State: {gameState})</GameTitle>
       
       <Scoreboard>
         <ScoreItem>
@@ -342,21 +359,33 @@ const Game: React.FC = () => {
         </ScoreItem>
       </Scoreboard>
       
-      <GameField ref={gameFieldRef}>
+      <GameField 
+        ref={gameFieldRef} 
+        onClick={handleDebugClick}
+      >
         <StadiumBackground />
         <Pitcher isPitching={isPitching} />
         <Batter isSwinging={isSwinging} />
         <HomePlate />
         <div ref={ballRef} style={{ 
           position: 'absolute',
-          left: ballPosition.x,
-          top: ballPosition.y,
-          transition: 'left 16ms linear, top 16ms linear'
+          left: ballPosition.x - 12.5, /* Center ball by offsetting width/2 */
+          top: ballPosition.y - 12.5,  /* Center ball by offsetting height/2 */
+          transition: 'left 16ms linear, top 16ms linear',
+          zIndex: 100
         }}>
           <BallStyled visible={ballVisible} />
         </div>
         
         <DugoutChant isActive={gameState === GameState.BATTING || gameState === GameState.PITCHING} />
+        
+        <DebugMessage>
+          {gameState === GameState.BATTING ? 
+            'Click or tap to swing!' : 
+            gameState === GameState.WAITING ? 
+              'Click or tap to pitch!' : 
+              'Click or tap to continue'}
+        </DebugMessage>
         
         {resultMessage && (
           <ResultMessage type={resultMessage.type}>
@@ -374,10 +403,17 @@ const Game: React.FC = () => {
       
       <ControlsContainer>
         <Button 
-          onClick={gameState === GameState.WAITING ? handlePitch : handleSwing}
-          disabled={gameState === GameState.BETWEEN_PLAYS || gameState === GameState.PITCHING}
+          highlight={gameState === GameState.BATTING}
+          onClick={
+            gameState === GameState.WAITING ? handlePitch : 
+            gameState === GameState.BATTING ? handleSwing : 
+            startNewAtBat
+          }
         >
-          {gameState === GameState.WAITING ? 'Pitch' : 'Swing!'}
+          {gameState === GameState.WAITING ? 'Pitch!' : 
+           gameState === GameState.BATTING ? 'Swing!' : 
+           gameState === GameState.BETWEEN_PLAYS ? 'Next Pitch' :
+           'Continue'}
         </Button>
       </ControlsContainer>
     </GameContainer>
