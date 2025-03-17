@@ -130,10 +130,10 @@ const swingAnimation = keyframes`
     transform: rotate(135deg) translateX(0);  /* Contact point - horizontal */
   }
   70% {
-    transform: rotate(160deg) translateX(0);  /* Follow through */
+    transform: rotate(180deg) translateX(0);  /* Follow through */
   }
   85% {
-    transform: rotate(180deg) translateX(0);  /* Extended follow through */
+    transform: rotate(225deg) translateX(0);  /* Extended follow through */
   }
   100% { 
     transform: rotate(190deg) translateX(0);  /* Complete follow through */
