@@ -51,8 +51,16 @@ const Game: React.FC = () => {
   const [overlayContent, setOverlayContent] = useState({ title: '', text: '' });
   
   // Ball position animation - position directly in front of pitcher for visibility
-  const ballStartPosition = { x: window.innerWidth / 2, y: window.innerHeight * 0.35 };
-  const ballEndPosition = { x: window.innerWidth / 2, y: window.innerHeight * 0.65 };
+  const ballStartPosition = React.useMemo(() => ({ 
+    x: window.innerWidth / 2, 
+    y: window.innerHeight * 0.35 
+  }), []);
+  
+  const ballEndPosition = React.useMemo(() => ({ 
+    x: window.innerWidth / 2, 
+    y: window.innerHeight * 0.65 
+  }), []);
+  
   const ballPositionRef = useRef<Position>(ballStartPosition);
   const pitchTimingRef = useRef<number>(0);
   
@@ -370,6 +378,10 @@ const Game: React.FC = () => {
         <Pitcher isPitching={isPitching} />
         <Batter isSwinging={isSwinging} />
         <HomePlate />
+        
+        {gameState === GameState.BATTING && (
+          <DebugButton onClick={handleSwing}>HIT BALL!</DebugButton>
+        )}
         <div ref={ballRef} style={{ 
           position: 'absolute',
           left: ballPosition.x - 20, /* Center ball by offsetting width/2 (now 40px) */
