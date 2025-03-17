@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Yellow softball base -->
+  <circle cx="32" cy="32" r="30" fill="#f3e03b" stroke="#d5a100" stroke-width="2"/>
+  
+  <!-- Red stitching pattern -->
+  <path d="M32,2 C32,32 32,62 32,62" fill="none" stroke="#cc0000" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <path d="M2,32 C32,32 62,32 62,32" fill="none" stroke="#cc0000" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <path d="M9.5,9.5 C54.5,54.5 54.5,54.5 54.5,54.5" fill="none" stroke="#cc0000" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <path d="M54.5,9.5 C9.5,54.5 9.5,54.5 9.5,54.5" fill="none" stroke="#cc0000" stroke-width="1.5" stroke-dasharray="3,3"/>
+  
+  <!-- Softball seams -->
+  <path d="M32,2 C17,2 2,17 2,32" fill="none" stroke="#cc0000" stroke-width="2" stroke-linecap="round"/>
+  <path d="M32,2 C47,2 62,17 62,32" fill="none" stroke="#cc0000" stroke-width="2" stroke-linecap="round"/>
+  <path d="M32,62 C17,62 2,47 2,32" fill="none" stroke="#cc0000" stroke-width="2" stroke-linecap="round"/>
+  <path d="M32,62 C47,62 62,47 62,32" fill="none" stroke="#cc0000" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Shadow effect -->
+  <circle cx="38" cy="38" r="26" fill="rgba(0,0,0,0.1)" style="mix-blend-mode: multiply;"/>
+</svg>

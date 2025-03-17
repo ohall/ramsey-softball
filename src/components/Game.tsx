@@ -23,7 +23,6 @@ import {
   OverlayTitle,
   OverlayText,
   GameTitle,
-  DebugMessage,
   DebugButton
 } from './StyledComponents';
 
@@ -394,13 +393,6 @@ const Game: React.FC = () => {
         
         <DugoutChant isActive={gameState === GameState.BATTING || gameState === GameState.PITCHING} />
         
-        <DebugMessage>
-          {gameState === GameState.BATTING ? 
-            'Click or tap to swing!' : 
-            gameState === GameState.WAITING ? 
-              'Click or tap to pitch!' : 
-              'Click or tap to continue'}
-        </DebugMessage>
         
         {resultMessage && (
           <ResultMessage type={resultMessage.type}>
