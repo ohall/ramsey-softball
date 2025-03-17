@@ -121,19 +121,19 @@ const swingAnimation = keyframes`
     transform: rotate(0deg) translateX(0);  /* Start with bat cocked back */
   }
   20% { 
-    transform: rotate(0deg) translateX(-5px);  /* Loading the swing */
+    transform: rotate(0deg) translateX(0);  /* Loading the swing */
   }
   40% { 
-    transform: rotate(0deg) translateX(-15px);  /* Moving through the zone */
+    transform: rotate(0deg) translateX(0);  /* Moving through the zone */
   }
   50% {
-    transform: rotate(90deg) translateX(-20px);  /* Contact point - horizontal */
+    transform: rotate(90deg) translateX(0);  /* Contact point - horizontal */
   }
   70% {
-    transform: rotate(160deg) translateX(-15px);  /* Follow through */
+    transform: rotate(160deg) translateX(0);  /* Follow through */
   }
   85% {
-    transform: rotate(180deg) translateX(-5px);  /* Extended follow through */
+    transform: rotate(180deg) translateX(0);  /* Extended follow through */
   }
   100% { 
     transform: rotate(190deg) translateX(0);  /* Complete follow through */
