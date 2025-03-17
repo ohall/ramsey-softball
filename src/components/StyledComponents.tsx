@@ -21,6 +21,21 @@ export const GameField = styled.div`
   position: relative;
   overflow: hidden;
   background: radial-gradient(circle at center, #9ACD32 0%, #8CC152 70%);
+  
+  /* Add field lines for better contrast with ball */
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+    z-index: 1;
+  }
 `;
 
 // Scoreboard
@@ -160,28 +175,47 @@ const spinAnimation = keyframes`
 
 export const Ball = styled.div<{ visible: boolean }>`
   position: absolute;
-  width: 25px;
-  height: 25px;
+  width: 40px;
+  height: 40px;
   background-color: white;
   border-radius: 50%;
-  border: 2px solid #CC0000;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  border: 3px solid #CC0000;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
   opacity: ${props => props.visible ? 1 : 0};
   transition: opacity 0.2s;
-  z-index: 10;
+  z-index: 1000;
   
   &:before {
     content: '';
     position: absolute;
-    top: 3px;
-    left: 3px;
-    right: 3px;
-    bottom: 3px;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
     border-radius: 50%;
-    border: 2px solid #CC0000;
+    border: 3px solid #CC0000;
     border-top-color: transparent;
     border-left-color: transparent;
     animation: ${spinAnimation} 0.5s linear infinite;
+  }
+  
+  /* Add outer glow to make ball extremely visible */
+  &:after {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+    z-index: -1;
+    animation: pulse 1s infinite alternate;
+  }
+  
+  @keyframes pulse {
+    from { opacity: 0.5; }
+    to { opacity: 1; }
   }
 `;
 
