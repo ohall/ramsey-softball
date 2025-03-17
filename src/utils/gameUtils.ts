@@ -34,31 +34,69 @@ export const calculateSwingResult = (
   swingPosition: Position,
   ballPosition: Position
 ): SwingResult => {
-  // Timing difference (0 is perfect)
-  const timingDiff = Math.abs(swingTiming - pitchTiming);
+  // Get bat position based on swing timing
+  const swingProgress = Math.min(1, Math.max(0, (swingTiming - pitchTiming + 400) / 400));
   
-  // Position difference (0 is perfect)
-  const positionDiff = Math.sqrt(
-    Math.pow(swingPosition.x - ballPosition.x, 2) +
-    Math.pow(swingPosition.y - ballPosition.y, 2)
+  // Calculate bat tip position during swing
+  const getBatPosition = (progress: number) => {
+    const batLength = 90; // Length of bat in pixels
+    const batterX = window.innerWidth / 2 + 80; // Batter's x position
+    const batterY = window.innerHeight * 0.85; // Batter's y position
+    
+    let angle = 0;
+    let translateX = 0;
+    
+    if (progress < 0.2) {
+      angle = 45 - (progress / 0.2) * 15;
+      translateX = 0;
+    } else if (progress < 0.4) {
+      angle = 30 - ((progress - 0.2) / 0.2) * 30;
+      translateX = -((progress - 0.2) / 0.2) * 15;
+    } else if (progress < 0.5) {
+      angle = ((progress - 0.4) / 0.1) * 90;
+      translateX = -15 - ((progress - 0.4) / 0.1) * 5;
+    } else if (progress < 0.7) {
+      angle = 90 + ((progress - 0.5) / 0.2) * 70;
+      translateX = -20 + ((progress - 0.5) / 0.2) * 5;
+    } else {
+      angle = 160 + ((progress - 0.7) / 0.3) * 30;
+      translateX = -15 + ((progress - 0.7) / 0.3) * 15;
+    }
+    
+    // Convert angle to radians
+    const rad = angle * Math.PI / 180;
+    
+    // Calculate bat tip position
+    const batTipX = batterX - 20 + translateX + Math.cos(rad) * batLength;
+    const batTipY = batterY + Math.sin(rad) * batLength;
+    
+    return { x: batTipX, y: batTipY };
+  };
+  
+  // Check if bat intersects with ball
+  const batPos = getBatPosition(swingProgress);
+  
+  // Calculate distance between bat and ball
+  const distance = Math.sqrt(
+    Math.pow(batPos.x - ballPosition.x, 2) +
+    Math.pow(batPos.y - ballPosition.y, 2)
   );
   
-  // Calculate quality of contact (0-1, 1 is perfect)
-  const timingQuality = Math.max(0, 1 - (timingDiff / 300)); // 300ms window
-  const positionQuality = Math.max(0, 1 - (positionDiff / 50)); // 50px window
-  const contactQuality = timingQuality * positionQuality;
-  
-  // Determine result based on contact quality
-  const random = Math.random();
-  if (contactQuality < 0.2) {
-    return SwingResult.MISS;
-  } else if (contactQuality < 0.4) {
-    return random < 0.8 ? SwingResult.FOUL : SwingResult.MISS;
-  } else if (contactQuality < 0.7) {
-    return random < 0.7 ? SwingResult.HIT : SwingResult.FOUL;
-  } else {
-    return random < 0.3 ? SwingResult.HOME_RUN : SwingResult.HIT;
+  // If the bat is close enough to the ball, it's a hit
+  if (distance < 40) { // Ball diameter is 40px
+    // Quality of contact determines type of hit
+    const contactQuality = 1 - (distance / 40);
+    
+    if (contactQuality > 0.8) {
+      return SwingResult.HOME_RUN;
+    } else if (contactQuality > 0.5) {
+      return SwingResult.HIT;
+    } else {
+      return SwingResult.FOUL;
+    }
   }
+  
+  return SwingResult.MISS;
 };
 
 // Get a random item from an array
