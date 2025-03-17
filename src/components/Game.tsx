@@ -151,6 +151,7 @@ const Game: React.FC = () => {
   };
   
   // Handle pitch animation (memoized version)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handlePitch = useCallback(pitchFn, [
     gameState, 
     playSound, 
