@@ -71,12 +71,14 @@ const Game: React.FC = () => {
   
   // Initialize a new at-bat
   const startNewAtBat = useCallback(() => {
-    // Always keep ball visible and start in batting state for easier gameplay
-    setGameState(GameState.BATTING);
+    // Reset to waiting state for next pitch
+    setGameState(GameState.WAITING);
     setBallVisible(true);
     setResultMessage(null);
-    // Reset ball position to make it clearly visible
+    // Reset ball position to pitcher's mound
     setBallPosition(ballStartPosition);
+    // Reset current pitch
+    setCurrentPitch(null);
   }, [ballStartPosition]);
   
   // Reset inning
