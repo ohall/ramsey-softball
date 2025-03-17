@@ -120,24 +120,30 @@ const swingAnimation = keyframes`
   0% { 
     transform: rotate(45deg) translateX(0);  /* Start with bat cocked back */
   }
-  30% { 
-    transform: rotate(-10deg) translateX(-5px);  /* Start of forward swing */
+  20% { 
+    transform: rotate(30deg) translateX(-5px);  /* Loading the swing */
+  }
+  40% { 
+    transform: rotate(0deg) translateX(-15px);  /* Moving through the zone */
   }
   50% {
-    transform: rotate(90deg) translateX(-10px);  /* Contact point - horizontal */
+    transform: rotate(90deg) translateX(-20px);  /* Contact point - horizontal */
   }
-  75% {
-    transform: rotate(135deg) translateX(-5px);  /* Follow through */
+  70% {
+    transform: rotate(160deg) translateX(-15px);  /* Follow through */
+  }
+  85% {
+    transform: rotate(180deg) translateX(-5px);  /* Extended follow through */
   }
   100% { 
-    transform: rotate(160deg) translateX(0);  /* End of swing */
+    transform: rotate(190deg) translateX(0);  /* Complete follow through */
   }
 `;
 
 export const Batter = styled.div<{ isSwinging: boolean }>`
   position: absolute;
   bottom: 15%;
-  left: calc(50% + 60px); /* Move batter further right */
+  left: calc(50% + 80px); /* Move batter even further right */
   transform: translateX(-50%);
   width: 45px;
   height: 80px;
@@ -218,16 +224,16 @@ export const Batter = styled.div<{ isSwinging: boolean }>`
     content: '';
     position: absolute;
     top: 25px;
-    left: -15px;
-    width: 85px; /* Longer bat */
+    left: -20px; /* Move bat's pivot point further left */
+    width: 90px; /* Even longer bat */
     height: 8px;
-    background-color: #424242; /* Darker bat color */
+    background-color: #424242;
     border-radius: 4px;
     transform-origin: left center;
     transform: rotate(45deg);
     z-index: 4;
     ${props => props.isSwinging && css`
-      animation: ${swingAnimation} 0.25s ease-in-out forwards;
+      animation: ${swingAnimation} 0.4s ease-in-out forwards; /* Slower swing */
     `}
   }
 `;
