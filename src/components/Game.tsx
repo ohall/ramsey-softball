@@ -126,6 +126,8 @@ const Game: React.FC = () => {
       // Animate ball position over time
       const interval = 16; // ms (60fps)
       let time = 0;
+      let animationFrameId: number;
+      
       const animateBall = () => {
         time += interval;
         const progress = Math.min(time / pitchDuration, 1);
@@ -141,9 +143,14 @@ const Game: React.FC = () => {
         setBallPosition(position);
         
         if (progress < 1) {
-          requestAnimationFrame(animateBall);
+          animationFrameId = requestAnimationFrame(animateBall);
         } else {
-          // Pitch complete
+          // Pitch complete - ensure we set the final position
+          const finalPosition = calculatePitchPosition(1, pitch, ballStartPosition, ballEndPosition);
+          ballPositionRef.current = finalPosition;
+          setBallPosition(finalPosition);
+          
+          // Update game state
           setGameState(GameState.BATTING);
           
           // If the user doesn't swing, it's either a ball or a strike
@@ -153,7 +160,15 @@ const Game: React.FC = () => {
         }
       };
       
-      requestAnimationFrame(animateBall);
+      // Start animation
+      animationFrameId = requestAnimationFrame(animateBall);
+      
+      // Cleanup function to cancel animation if component unmounts or state changes
+      return () => {
+        if (animationFrameId) {
+          cancelAnimationFrame(animationFrameId);
+        }
+      };
     }, 500); // Wait for pitcher windup
     
     // Reset pitching animation
