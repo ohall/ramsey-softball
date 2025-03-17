@@ -309,7 +309,7 @@ const Game: React.FC = () => {
   
   // Handle swing
   const handleSwing = useCallback(() => {
-    if (gameState !== GameState.BATTING) return;
+    if (gameState !== GameState.BATTING && gameState !== GameState.PITCHING) return;
     
     setIsSwinging(true);
     playSound('swing');
