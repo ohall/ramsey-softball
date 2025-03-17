@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { useSpring, animated } from 'react-spring';
+// Removed react-spring due to typing issues
 import { GameState, SwingResult, Position, PitchSettings, GameStats } from '../utils/types';
 import { generatePitch, calculateSwingResult, calculatePitchPosition } from '../utils/gameUtils';
 import useSwipeDetection from '../hooks/useSwipeDetection';
@@ -54,24 +54,8 @@ const Game: React.FC = () => {
   const ballPositionRef = useRef<Position>(ballStartPosition);
   const pitchTimingRef = useRef<number>(0);
   
-  const ballProps = useSpring({
-    from: { x: ballStartPosition.x, y: ballStartPosition.y },
-    to: { x: ballStartPosition.x, y: ballStartPosition.y },
-    config: { duration: 0 }
-  });
-  
-  const setBallPosition = (position: { left: number; top: number; config?: any }) => {
-    ballProps.x.start({
-      from: position.left,
-      to: position.left,
-      config: position.config
-    });
-    ballProps.y.start({
-      from: position.top,
-      to: position.top,
-      config: position.config
-    });
-  };
+  // Simplified ball position state
+  const [ballPosition, setBallPosition] = useState<Position>(ballStartPosition);
   
   // Sound effects
   const { playSound } = useSoundEffects();
@@ -142,11 +126,7 @@ const Game: React.FC = () => {
         );
         
         ballPositionRef.current = position;
-        setBallPosition({ 
-          left: position.x, 
-          top: position.y,
-          config: { duration: interval } 
-        });
+        setBallPosition(position);
         
         if (progress < 1) {
           requestAnimationFrame(animateBall);
@@ -366,13 +346,14 @@ const Game: React.FC = () => {
         <Pitcher isPitching={isPitching} />
         <Batter isSwinging={isSwinging} />
         <HomePlate />
-        <animated.div ref={ballRef} style={{ 
+        <div ref={ballRef} style={{ 
           position: 'absolute',
-          left: ballProps.x,
-          top: ballProps.y
+          left: ballPosition.x,
+          top: ballPosition.y,
+          transition: 'left 16ms linear, top 16ms linear'
         }}>
           <BallStyled visible={ballVisible} />
-        </animated.div>
+        </div>
         
         <DugoutChant isActive={gameState === GameState.BATTING || gameState === GameState.PITCHING} />
         
