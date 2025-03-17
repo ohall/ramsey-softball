@@ -66,26 +66,78 @@ export const calculateSwingResult = (
     // Convert angle to radians
     const rad = angle * Math.PI / 180;
     
-    // Calculate bat tip position
-    const batTipX = batterX - 20 + translateX + Math.cos(rad) * batLength;
-    const batTipY = batterY + Math.sin(rad) * batLength;
+    // Calculate bat handle and tip positions
+    const handleX = batterX - 20 + translateX;
+    const handleY = batterY;
     
-    return { x: batTipX, y: batTipY };
+    const tipX = handleX + Math.cos(rad) * batLength;
+    const tipY = handleY + Math.sin(rad) * batLength;
+    
+    return {
+      handle: { x: handleX, y: handleY },
+      tip: { x: tipX, y: tipY },
+      angle: rad
+    };
   };
   
   // Check if bat intersects with ball
   const batPos = getBatPosition(swingProgress);
   
-  // Calculate distance between bat and ball
-  const distance = Math.sqrt(
-    Math.pow(batPos.x - ballPosition.x, 2) +
-    Math.pow(batPos.y - ballPosition.y, 2)
+  // Function to calculate distance from a point to a line segment
+  const distanceToLineSegment = (
+    point: Position,
+    lineStart: Position,
+    lineEnd: Position
+  ): number => {
+    const A = point.x - lineStart.x;
+    const B = point.y - lineStart.y;
+    const C = lineEnd.x - lineStart.x;
+    const D = lineEnd.y - lineStart.y;
+
+    const dot = A * C + B * D;
+    const lenSq = C * C + D * D;
+    let param = -1;
+
+    if (lenSq !== 0) {
+      param = dot / lenSq;
+    }
+
+    let xx, yy;
+
+    if (param < 0) {
+      xx = lineStart.x;
+      yy = lineStart.y;
+    } else if (param > 1) {
+      xx = lineEnd.x;
+      yy = lineEnd.y;
+    } else {
+      xx = lineStart.x + param * C;
+      yy = lineStart.y + param * D;
+    }
+
+    const dx = point.x - xx;
+    const dy = point.y - yy;
+
+    return Math.sqrt(dx * dx + dy * dy);
+  };
+
+  // Calculate distance from ball to bat (as a line segment)
+  const distanceToBat = distanceToLineSegment(
+    ballPosition,
+    batPos.handle,
+    batPos.tip
   );
   
-  // If the bat is close enough to the ball, it's a hit
-  if (distance < 40) { // Ball diameter is 40px
-    // Quality of contact determines type of hit
-    const contactQuality = 1 - (distance / 40);
+  // If the ball is close enough to the bat, it's a hit
+  const hitThreshold = 30; // Increased hit detection radius
+  if (distanceToBat < hitThreshold) {
+    // Quality of contact depends on:
+    // 1. Distance from bat (closer is better)
+    // 2. Angle of bat (horizontal is better for line drives)
+    const distanceQuality = 1 - (distanceToBat / hitThreshold);
+    const angleQuality = Math.abs(Math.cos(batPos.angle)); // 1 when horizontal, 0 when vertical
+    
+    const contactQuality = (distanceQuality * 0.7) + (angleQuality * 0.3);
     
     if (contactQuality > 0.8) {
       return SwingResult.HOME_RUN;
