@@ -118,23 +118,26 @@ export const Pitcher = styled.div<{ isPitching: boolean }>`
 // Batter animation - only for the bat, not the whole batter
 const swingAnimation = keyframes`
   0% { 
-    transform: rotate(45deg);  /* Start with bat angled up */
+    transform: rotate(45deg) translateX(0);  /* Start with bat cocked back */
   }
-  40% { 
-    transform: rotate(0deg);   /* Mid-swing, bat is vertical */
+  30% { 
+    transform: rotate(-10deg) translateX(-5px);  /* Start of forward swing */
   }
   50% {
-    transform: rotate(90deg);  /* Point of contact - bat is horizontal */
+    transform: rotate(90deg) translateX(-10px);  /* Contact point - horizontal */
+  }
+  75% {
+    transform: rotate(135deg) translateX(-5px);  /* Follow through */
   }
   100% { 
-    transform: rotate(135deg); /* Follow through */
+    transform: rotate(160deg) translateX(0);  /* End of swing */
   }
 `;
 
 export const Batter = styled.div<{ isSwinging: boolean }>`
   position: absolute;
   bottom: 15%;
-  left: calc(50% + 40px);
+  left: calc(50% + 60px); /* Move batter further right */
   transform: translateX(-50%);
   width: 45px;
   height: 80px;
@@ -214,9 +217,9 @@ export const Batter = styled.div<{ isSwinging: boolean }>`
   .bat {
     content: '';
     position: absolute;
-    top: 20px;
-    left: -5px;
-    width: 70px;
+    top: 25px;
+    left: -15px;
+    width: 85px; /* Longer bat */
     height: 8px;
     background-color: #424242; /* Darker bat color */
     border-radius: 4px;
@@ -224,7 +227,7 @@ export const Batter = styled.div<{ isSwinging: boolean }>`
     transform: rotate(45deg);
     z-index: 4;
     ${props => props.isSwinging && css`
-      animation: ${swingAnimation} 0.15s ease-in-out forwards;
+      animation: ${swingAnimation} 0.25s ease-in-out forwards;
     `}
   }
 `;
