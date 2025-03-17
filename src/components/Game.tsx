@@ -31,8 +31,8 @@ const Game: React.FC = () => {
   const gameFieldRef = useRef<HTMLDivElement>(null);
   const ballRef = useRef<HTMLDivElement>(null);
   
-  // State - Start in BATTING state for immediate interaction
-  const [gameState, setGameState] = useState<GameState>(GameState.BATTING);
+  // State - Start in WAITING state for proper ball initialization
+  const [gameState, setGameState] = useState<GameState>(GameState.WAITING);
   const [stats, setStats] = useState<GameStats>({
     score: 0,
     strikes: 0,
