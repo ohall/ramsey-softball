@@ -341,7 +341,7 @@ const Game: React.FC = () => {
     onSwipeStart: () => {},
     onSwipeMove: () => {},
     onSwipeEnd: () => {
-      if (gameState === GameState.BATTING) {
+      if (gameState === GameState.BATTING || gameState === GameState.PITCHING) {
         handleSwing();
       }
     },
@@ -349,7 +349,7 @@ const Game: React.FC = () => {
       // Use the same debug handling for taps
       if (gameState === GameState.WAITING) {
         handlePitch();
-      } else if (gameState === GameState.BATTING) {
+      } else if (gameState === GameState.BATTING || gameState === GameState.PITCHING) {
         handleSwing();
       } else if (gameState === GameState.BETWEEN_PLAYS) {
         startNewAtBat();
@@ -395,13 +395,13 @@ const Game: React.FC = () => {
         <Batter isSwinging={isSwinging} />
         <HomePlate />
         
-        {gameState === GameState.BATTING && (
+        {(gameState === GameState.BATTING || gameState === GameState.PITCHING) && (
           <DebugButton onClick={handleSwing}>HIT BALL!</DebugButton>
         )}
         <div ref={ballRef} style={{ 
           position: 'absolute',
-          left: ballPosition.x - 20, /* Center ball by offsetting width/2 (now 40px) */
-          top: ballPosition.y - 20,  /* Center ball by offsetting height/2 (now 40px) */
+          left: ballPosition.x - 20,
+          top: ballPosition.y - 20,
           transition: 'left 16ms linear, top 16ms linear',
           zIndex: 100
         }}>
@@ -409,7 +409,6 @@ const Game: React.FC = () => {
         </div>
         
         <DugoutChant isActive={gameState === GameState.BATTING || gameState === GameState.PITCHING} />
-        
         
         {resultMessage && (
           <ResultMessage type={resultMessage.type}>
@@ -427,15 +426,15 @@ const Game: React.FC = () => {
       
       <ControlsContainer>
         <Button 
-          highlight={gameState === GameState.BATTING}
+          highlight={gameState === GameState.BATTING || gameState === GameState.PITCHING}
           onClick={
             gameState === GameState.WAITING ? handlePitch : 
-            gameState === GameState.BATTING ? handleSwing : 
+            (gameState === GameState.BATTING || gameState === GameState.PITCHING) ? handleSwing : 
             startNewAtBat
           }
         >
           {gameState === GameState.WAITING ? 'Pitch!' : 
-           gameState === GameState.BATTING ? 'Swing!' : 
+           (gameState === GameState.BATTING || gameState === GameState.PITCHING) ? 'Swing!' : 
            gameState === GameState.BETWEEN_PLAYS ? 'Next Pitch' :
            'Continue'}
         </Button>
