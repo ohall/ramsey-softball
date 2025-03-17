@@ -54,11 +54,24 @@ const Game: React.FC = () => {
   const ballPositionRef = useRef<Position>(ballStartPosition);
   const pitchTimingRef = useRef<number>(0);
   
-  const [ballProps, setBallPosition] = useSpring(() => ({ 
-    left: ballStartPosition.x, 
-    top: ballStartPosition.y,
+  const ballProps = useSpring({
+    from: { x: ballStartPosition.x, y: ballStartPosition.y },
+    to: { x: ballStartPosition.x, y: ballStartPosition.y },
     config: { duration: 0 }
-  }));
+  });
+  
+  const setBallPosition = (position: { left: number; top: number; config?: any }) => {
+    ballProps.x.start({
+      from: position.left,
+      to: position.left,
+      config: position.config
+    });
+    ballProps.y.start({
+      from: position.top,
+      to: position.top,
+      config: position.config
+    });
+  };
   
   // Sound effects
   const { playSound } = useSoundEffects();
@@ -353,7 +366,11 @@ const Game: React.FC = () => {
         <Pitcher isPitching={isPitching} />
         <Batter isSwinging={isSwinging} />
         <HomePlate />
-        <animated.div ref={ballRef} style={{ ...ballProps, position: 'absolute' as const }}>
+        <animated.div ref={ballRef} style={{ 
+          position: 'absolute',
+          left: ballProps.x,
+          top: ballProps.y
+        }}>
           <BallStyled visible={ballVisible} />
         </animated.div>
         
