@@ -134,40 +134,94 @@ const swingAnimation = keyframes`
 export const Batter = styled.div<{ isSwinging: boolean }>`
   position: absolute;
   bottom: 15%;
-  left: calc(50% + 40px); /* Position batter next to home plate */
+  left: calc(50% + 40px);
   transform: translateX(-50%);
-  width: 40px;
-  height: 70px;
-  background-color: #FF6347;
-  border-radius: 50% 50% 10px 10px;
+  width: 45px;
+  height: 80px;
+  background-color: #4CAF50; /* Green uniform color */
+  border-radius: 25px 25px 10px 10px;
   z-index: 5;
   
-  /* Head */
+  /* Yellow trim on uniform */
   &:before {
     content: '';
     position: absolute;
-    top: -20px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 25px 25px 10px 10px;
+    border: 4px solid #FFD700;
+    clip-path: polygon(0 30%, 100% 30%, 100% 100%, 0 100%);
+  }
+
+  /* Head with cap */
+  &:after {
+    content: '';
+    position: absolute;
+    top: -25px;
     left: 50%;
     transform: translateX(-50%);
-    width: 25px;
-    height: 25px;
-    background-color: #FFA07A;
+    width: 35px;
+    height: 35px;
+    background-color: #FFA07A; /* Skin tone */
     border-radius: 50%;
     z-index: 6;
   }
-  
+
+  /* Cap */
+  .cap {
+    content: '';
+    position: absolute;
+    top: -32px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 25px;
+    background-color: #4CAF50; /* Green cap */
+    border-radius: 50% 50% 0 0;
+    z-index: 7;
+
+    /* Cap bill */
+    &:before {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 5px;
+      width: 35px;
+      height: 12px;
+      background-color: #4CAF50;
+      border-radius: 40% 40% 0 0;
+      transform: rotate(-10deg);
+    }
+
+    /* Ponytail */
+    &:after {
+      content: '';
+      position: absolute;
+      top: -5px;
+      right: -15px;
+      width: 25px;
+      height: 35px;
+      background-color: #FF6347; /* Orange-red hair */
+      border-radius: 50% 50% 20% 20%;
+      transform: rotate(30deg);
+      z-index: 5;
+    }
+  }
+
   /* Bat */
-  &:after {
+  .bat {
     content: '';
     position: absolute;
     top: 20px;
     left: -5px;
     width: 70px;
     height: 8px;
-    background-color: #8B4513;
+    background-color: #424242; /* Darker bat color */
     border-radius: 4px;
     transform-origin: left center;
-    transform: rotate(45deg); /* Start position matches animation start */
+    transform: rotate(45deg);
     z-index: 4;
     ${props => props.isSwinging && css`
       animation: ${swingAnimation} 0.15s ease-in-out forwards;

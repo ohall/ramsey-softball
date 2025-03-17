@@ -392,7 +392,10 @@ const Game: React.FC = () => {
       >
         <StadiumBackground />
         <Pitcher isPitching={isPitching} />
-        <Batter isSwinging={isSwinging} />
+        <Batter isSwinging={isSwinging}>
+          <div className="cap" />
+          <div className="bat" />
+        </Batter>
         <HomePlate />
         
         {(gameState === GameState.BATTING || gameState === GameState.PITCHING) && (
