@@ -228,6 +228,22 @@ export const ControlsContainer = styled.div`
   color: white;
 `;
 
+export const DebugButton = styled.button`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 0, 0, 0.5);
+  color: white;
+  font-size: 24px;
+  padding: 20px 30px;
+  border-radius: 20px;
+  border: none;
+  z-index: 999;
+  cursor: pointer;
+  font-weight: bold;
+`;
+
 export const Button = styled.button<{ highlight?: boolean }>`
   padding: 16px 24px;
   background-color: ${props => props.highlight ? '#2ECC71' : '#E74C3C'};
@@ -427,14 +443,14 @@ export const GameTitle = styled.h1`
 
 export const DebugMessage = styled.div`
   position: absolute;
-  bottom: 35%;
+  bottom: 40%;
   left: 50%;
   transform: translateX(-50%);
   background-color: rgba(0, 0, 0, 0.8);
   color: white;
-  padding: 12px 20px;
+  padding: 15px 25px;
   border-radius: 8px;
-  font-size: 18px;
+  font-size: 22px;
   font-weight: bold;
   z-index: 1000;
   text-align: center;

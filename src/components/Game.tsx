@@ -23,7 +23,8 @@ import {
   OverlayTitle,
   OverlayText,
   GameTitle,
-  DebugMessage
+  DebugMessage,
+  DebugButton
 } from './StyledComponents';
 
 const Game: React.FC = () => {
@@ -63,11 +64,13 @@ const Game: React.FC = () => {
   
   // Initialize a new at-bat
   const startNewAtBat = useCallback(() => {
-    setGameState(GameState.WAITING);
-    // Keep ball visible for debugging
+    // Always keep ball visible and start in batting state for easier gameplay
+    setGameState(GameState.BATTING);
     setBallVisible(true);
     setResultMessage(null);
-  }, []);
+    // Reset ball position to make it clearly visible
+    setBallPosition(ballStartPosition);
+  }, [ballStartPosition]);
   
   // Reset inning
   const resetInning = useCallback(() => {
