@@ -118,10 +118,10 @@ export const Pitcher = styled.div<{ isPitching: boolean }>`
 // Batter animation - only for the bat, not the whole batter
 const swingAnimation = keyframes`
   0% { 
-    transform: rotate(45deg) translateX(0);  /* Start with bat cocked back */
+    transform: rotate(0deg) translateX(0);  /* Start with bat cocked back */
   }
   20% { 
-    transform: rotate(30deg) translateX(-5px);  /* Loading the swing */
+    transform: rotate(0deg) translateX(-5px);  /* Loading the swing */
   }
   40% { 
     transform: rotate(0deg) translateX(-15px);  /* Moving through the zone */
