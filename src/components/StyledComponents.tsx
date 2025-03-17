@@ -62,33 +62,49 @@ export const Pitcher = styled.div<{ isPitching: boolean }>`
   top: 20%;
   left: 50%;
   transform: translateX(-50%);
-  width: 30px;
-  height: 60px;
+  width: 40px;
+  height: 70px;
   background-color: #3399FF;
   border-radius: 50% 50% 10px 10px;
+  z-index: 5;
   
   ${props => props.isPitching && css`
     animation: ${windupAnimation} 0.5s ease-in-out;
   `}
   
+  /* Head */
   &:before {
     content: '';
     position: absolute;
-    top: -15px;
+    top: -20px;
     left: 50%;
     transform: translateX(-50%);
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
     background-color: #FFA07A;
     border-radius: 50%;
+    z-index: 6;
+  }
+  
+  /* Arms */
+  &:after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    right: -15px;
+    width: 40px;
+    height: 10px;
+    background-color: #3399FF;
+    border-radius: 5px;
+    transform: rotate(-20deg);
   }
 `;
 
 // Batter animation
 const swingAnimation = keyframes`
   0% { transform: rotate(0); }
-  50% { transform: rotate(-45deg); }
-  100% { transform: rotate(45deg); }
+  30% { transform: rotate(-60deg); }
+  100% { transform: rotate(60deg); }
 `;
 
 export const Batter = styled.div<{ isSwinging: boolean }>`
@@ -139,24 +155,25 @@ const spinAnimation = keyframes`
 
 export const Ball = styled.div<{ visible: boolean }>`
   position: absolute;
-  width: 15px;
-  height: 15px;
+  width: 25px;
+  height: 25px;
   background-color: white;
   border-radius: 50%;
-  border: 1px solid #CC0000;
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+  border: 2px solid #CC0000;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
   opacity: ${props => props.visible ? 1 : 0};
   transition: opacity 0.2s;
+  z-index: 10;
   
   &:before {
     content: '';
     position: absolute;
-    top: 2px;
-    left: 2px;
-    right: 2px;
-    bottom: 2px;
+    top: 3px;
+    left: 3px;
+    right: 3px;
+    bottom: 3px;
     border-radius: 50%;
-    border: 1px solid #CC0000;
+    border: 2px solid #CC0000;
     border-top-color: transparent;
     border-left-color: transparent;
     animation: ${spinAnimation} 0.5s linear infinite;
