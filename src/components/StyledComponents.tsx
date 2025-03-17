@@ -136,7 +136,7 @@ const swingAnimation = keyframes`
     transform: rotate(225deg) translateX(0);  /* Extended follow through */
   }
   100% { 
-    transform: rotate(190deg) translateX(0);  /* Complete follow through */
+    transform: rotate(320deg) translateX(0);  /* Complete follow through */
   }
 `;
 
