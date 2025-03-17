@@ -22,7 +22,7 @@ export const useSwipeDetection = (targetRef: React.RefObject<HTMLElement | null>
 
   useEffect(() => {
     const element = targetRef.current;
-    if (!element) return;
+    if (!element) return () => {};
 
     const handleTouchStart = (e: TouchEvent<HTMLElement>) => {
       const touch = e.touches[0];

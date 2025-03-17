@@ -55,7 +55,8 @@ const Game: React.FC = () => {
   const pitchTimingRef = useRef<number>(0);
   
   const [ballProps, setBallPosition] = useSpring(() => ({ 
-    to: { left: ballStartPosition.x, top: ballStartPosition.y }, 
+    left: ballStartPosition.x, 
+    top: ballStartPosition.y,
     config: { duration: 0 }
   }));
   
@@ -318,7 +319,7 @@ const Game: React.FC = () => {
     }
   };
   
-  const { isSwiping } = useSwipeDetection(gameFieldRef, swipeEvents);
+  useSwipeDetection(gameFieldRef, swipeEvents);
   
   return (
     <GameContainer>
